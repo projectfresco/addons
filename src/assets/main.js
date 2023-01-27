@@ -988,6 +988,7 @@ var gSite = {
                 }
                 let releaseCompatibility = release.applications ||
                     (releaseData.compatibility &&
+                     version in releaseData.compatibility &&
                      releaseData.compatibility[version].applications);
                 if (releaseCompatibility) {
                     gUtils.appendHtml(listItem.desc, "Works with:");
@@ -1070,6 +1071,7 @@ var gSite = {
                 }
                 let releaseCompatibility = release.applications ||
                     (releaseData.compatibility &&
+                     version in releaseData.compatibility &&
                      releaseData.compatibility[version].applications);
                 if (releaseCompatibility) {
                     var ilCompatibility = gUtils.createIsland("Compatibility");
