@@ -41,6 +41,8 @@ const APP_NAV = [
     }
 ];
 
+const APP_ADMIN_MODE = false;
+
 const CONTENT_TYPE_XPI = "application/x-xpinstall";
 
 const MIRROR_PHOEBUS_PM = "https://addons.palemoon.org/addon/";
@@ -925,6 +927,7 @@ var gSite = {
 
         var ilLicense = gUtils.createIsland("License");
         var ilResources = gUtils.createIsland("Resources");
+        var ilAdminActions = gUtils.createIsland("Admin actions");
 
         colPrimary.addonIcon.src = addonType.defaultIcon;
         if (addon.iconUrl) {
@@ -1149,6 +1152,24 @@ var gSite = {
 
         colSecondary.content.appendChild(ilLicense);
         colSecondary.content.appendChild(ilResources);
+
+        if (APP_ADMIN_MODE) {
+            let amoOnlyMirror = (addon.mirrors &&
+                                 addon.mirrors.length == 1 &&
+                                 addon.mirrors[0] == "amo");
+            if (!amoOnlyMirror) {
+                let baseUpdateUrl = "https://addons.palemoon.org/panel/administration/?task=update&what=";
+                let editUrl = baseUpdateUrl + "metadata&slug=" + addon.slug;
+                gUtils.appendLink(ilAdminActions, "Edit metadata [Phoebus]", editUrl, true);                
+                let newReleaseUrl = baseUpdateUrl + "release&slug=" + addon.slug;
+                gUtils.appendLink(ilAdminActions, "New release [Phoebus]", newReleaseUrl, true);
+            }
+            if (addon.ghInfo) {
+                let newReleaseUrl = gAPI.getRepositoryUrl(addon.ghInfo) + "/releases/new";
+                gUtils.appendLink(ilAdminActions, "New release [GitHub]", newReleaseUrl, true);
+            }
+            colSecondary.content.appendChild(ilAdminActions);
+        }
     },
 
     buildLicensePage: async function (aAddonSlug) {
