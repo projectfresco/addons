@@ -935,6 +935,10 @@ var gSite = {
             gSections.primary.main.appendChild(listBox);
         }
 
+        if (gSections.primary.main.children.length == 0) {
+            gSections.primary.main.innerText = "No search results.";
+        }
+
         if (!isSearchMode) {
             if (aTypeSlug) {
                 gSections.setActiveNav(aTypeSlug);
@@ -1295,6 +1299,9 @@ var gSite = {
                 if (searchTerms) {
                     var searchInput = document.getElementById("q");
                     searchInput.value = searchTerms;
+                } else if (searchTerms == "") {
+                    gSections.primary.main.innerText = "Please enter some search terms.";
+                    break;
                 }
                 // Ignore page parameter if showing all add-ons
                 if (!category && page) {
