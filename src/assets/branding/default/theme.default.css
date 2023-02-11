@@ -78,6 +78,41 @@ footer {
   #page-header-inner {
     margin-bottom: 0;
   }
+  
+  #page-header-search {
+    margin-top: 0;
+    margin-bottom: 10px;
+  }
+}
+
+#page-header-search {
+  margin-top: -10px;
+}
+
+#page-header-search > #q {
+  font-size: 12px;
+  width: 170px;
+  border:	1px solid #9097A2;
+  background: #D9DBE1;
+  padding: 2px;
+}
+
+#page-header-search > #q:hover,
+#page-header-search > #q:focus {
+  background: #fff;
+}
+
+#page-header-search > #submit {
+  font-size: 12px;
+  font-weight: bold;
+  background: #6A7389;
+  color: #fff;
+  margin-left: 4px;
+  padding: 1px 4px;
+  border-right: 1px solid #283043;
+  border-bottom: 1px solid #283043;
+  border-top: 1px solid #9097A2;
+  border-left: 1px solid #9097A2;  
 }
 
 /* ::::: Navigation ::::: */

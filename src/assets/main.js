@@ -786,6 +786,25 @@ var gSections = {
         headerLogo.id = "page-header-logo";
         headerInner.appendChild(headerLogo);
 
+        // Header: search
+        let searchForm = document.createElement("form");
+        searchForm.method = "get";
+        searchForm.action = URL_APP_BASE;
+        searchForm.id = "page-header-search";
+
+        let searchInput = document.createElement("input");
+        searchInput.placeholder = "Find add-ons…";
+        searchInput.name = "q";
+        searchInput.id = "q";
+        searchForm.appendChild(searchInput);
+        
+        let searchSubmit = document.createElement("button");
+        searchSubmit.innerText = "Go";
+        searchSubmit.id = "submit";
+        searchForm.appendChild(searchSubmit);
+
+        headerInner.appendChild(searchForm);
+
         // Navigation
         let navList = document.createElement("ul");
         for (let nav of APP_NAV) {
@@ -843,10 +862,15 @@ var gSite = {
                 let ownerDName = metadata.owners[ownerIndex].displayName;
                 ownerHeader.innerText = `Add-ons by ${ownerDName}`;
                 gSections.primary.main.appendChild(ownerHeader);
+                document.title = `${ownerHeader.innerText} - ${APP_NAME}`;
             } else {
                 gSections.primary.main.innerText = "Invalid owner ID.";
                 return;
             }
+        }
+        if (aTerms) {
+            aTerms = aTerms.trim().toLowerCase();
+            document.title = `Search results for "${aTerms}" - ${APP_NAME}`;
         }
 
         var types = metadata.types;
@@ -864,7 +888,9 @@ var gSite = {
             } else {
                 title = "All";
             }
-            gSite.title = title;
+            if (!isSearchMode) {
+                gSite.title = title;
+            }
 
             let listTitle = document.createElement(
                 isSearchMode ? "h2" : "h1");
@@ -873,10 +899,6 @@ var gSite = {
 
             let listDescription = document.createElement("p");
             listDescription.innerText = addonType.description;
-
-            if (aTerms) {
-                aTerms = aTerms.trim().toLowerCase();
-            }
 
             let addons = metadata.addons.filter(function (item) {
                 let matchType = item.type == addonType.type;
@@ -1269,6 +1291,11 @@ var gSite = {
                 var user = urlParameters.get("user");
                 var searchTerms = urlParameters.get("q");
                 var page = parseInt(urlParameters.get("page"));
+                // Populate search box if we've terms.
+                if (searchTerms) {
+                    var searchInput = document.getElementById("q");
+                    searchInput.value = searchTerms;
+                }
                 // Ignore page parameter if showing all add-ons
                 if (!category && page) {
                     page = null;

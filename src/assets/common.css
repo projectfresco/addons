@@ -99,6 +99,13 @@ body[data-loaded="true"] #section-primary {
   margin: 5px;
 }
 
+/* ::::: Header ::::: */
+
+#page-header-inner {
+  display: flex;
+  justify-content: space-between;
+}
+
 /* ::::: Navigation ::::: */
 
 #page-nav ul {
@@ -300,6 +307,7 @@ th {
 }
 
 @media screen and (max-width: 768px) {
+  #page-header-inner,
   .two-col {
     flex-direction: column;
   }
