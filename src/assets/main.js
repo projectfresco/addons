@@ -53,6 +53,8 @@ const MIRROR_AMO = "https://addons.mozilla.org/en-US/firefox/addon/";
 
 const LIST_MAX_ITEMS = 25;
 
+const TMP_LICENSES_SELFHOSTED = ["PD", "?", "COPYRIGHT"];
+
 var gAppInfo = {
     identify: function () {
         var ua = navigator.userAgent;
@@ -937,7 +939,8 @@ var gSite = {
         // Identify add-on license
         var licenseText = "";
         var licenseUrl = `${URL_APP_BASE}license?addon=${addon.slug}`;
-        if (addon.license) {
+        // FIXME: Remove hardcoded check.
+        if (addon.license && addon.license != "COPYRIGHT") {
             let licenses = await gAPI.getLicenses();
             licenseText = licenses.names[addon.license];
         } else {
@@ -1185,7 +1188,8 @@ var gSite = {
 
         gSite.title = `${addon.name} - License`;
 
-        if (addon.license && addon.license != "PD") {
+        // FIXME: Use licenseText directly instead of doing these checks.
+        if (addon.license && TMP_LICENSES_SELFHOSTED.indexOf(addon.license) == -1) {
             gSections.primary.main.innerText = "Redirecting to license page...";
             let licenseUrl;
             if (addon.license == "custom" && addon.licenseUrl) {
@@ -1221,8 +1225,11 @@ var gSite = {
 
         var ilLicense = gUtils.createIsland("License");
         var licenseText = "";
+        // FIXME: Remove hardcoded check.
         if (addon.license == "PD") {
             licenseText = licenses.licenseText["publicDomain"];
+        } else if (addon.license == "#") {
+            licenseText = licenses.licenseText["unknown"];
         } else {
             licenseText = licenses.licenseText["copyrighted"];
         }
