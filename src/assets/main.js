@@ -853,23 +853,21 @@ var gSite = {
     buildCategoryPage: async function (aTypeSlug, aOwner, aTerms, aPage) {
         let metadata = await gAPI.getMetadata();
         var isSearchMode = (aOwner || aTerms);
+        var searchHeader = document.createElement("h1");
 
         var ownerIndex;
         if (aOwner) {
             ownerIndex = await gAPI.getOwnerIndex(aOwner);
             if (ownerIndex != -1) {
-                let ownerHeader = document.createElement("h1");
                 let ownerDName = metadata.owners[ownerIndex].displayName;
-                ownerHeader.innerText = `Add-ons by ${ownerDName}`;
-                gSections.primary.main.appendChild(ownerHeader);
-                document.title = `${ownerHeader.innerText} - ${APP_NAME}`;
+                searchHeader.innerText = `Add-ons by ${ownerDName}`;
             } else {
                 gSections.primary.main.innerText = "Invalid owner ID.";
                 return;
             }
         }
         if (aTerms) {
-            document.title = `Search results for "${aTerms}" - ${APP_NAME}`;
+            searchHeader.innerText = `Search results for "${aTerms}"`;
             aTerms = aTerms.trim().toLowerCase();
         }
 
@@ -937,6 +935,11 @@ var gSite = {
 
         if (gSections.primary.main.children.length == 0) {
             gSections.primary.main.innerText = "No search results.";
+        } else if (isSearchMode) {
+            gSections.primary.main.insertBefore(
+                searchHeader,
+                gSections.primary.main.firstChild);
+            document.title = `${searchHeader.innerText} - ${APP_NAME}`;
         }
 
         if (!isSearchMode) {
