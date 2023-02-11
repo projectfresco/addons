@@ -869,8 +869,8 @@ var gSite = {
             }
         }
         if (aTerms) {
-            aTerms = aTerms.trim().toLowerCase();
             document.title = `Search results for "${aTerms}" - ${APP_NAME}`;
+            aTerms = aTerms.trim().toLowerCase();
         }
 
         var types = metadata.types;
