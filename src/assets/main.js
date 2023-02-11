@@ -907,7 +907,8 @@ var gSite = {
                 let matchTerms = true;
                 if (aTerms) {
                     matchTerms = item.name.toLowerCase().includes(aTerms) ||
-                                 item.description && item.description.toLowerCase().includes(aTerms);
+                                 (item.description && item.description.toLowerCase().includes(aTerms)) ||
+                                 (item.keywords && item.keywords.toLowerCase().includes(aTerms));
                 }
 
                 return matchType && matchOwner && matchTerms;
