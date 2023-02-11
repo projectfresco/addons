@@ -33,12 +33,12 @@ const APP_NAV = [
         id: "dictionaries",
         label: "Dictionaries",
         url: URL_APP_BASE + "?category=dictionaries&page=1"
-    },
+    }/*,
     {
         id: "language-packs",
         label: "Language Packs",
         url: URL_APP_BASE + "?category=language-packs&page=1"
-    }
+    }*/
 ];
 
 const APP_ADMIN_MODE = false;
