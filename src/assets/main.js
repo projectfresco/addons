@@ -952,7 +952,6 @@ var gSite = {
         var addon = await gAPI.getAddon(aAddonSlug);
         if (!addon) {
             gSections.primary.main.innerText = "Invalid add-on.";
-            gSite.doneLoading();
             return;
         }
 
@@ -992,14 +991,12 @@ var gSite = {
         var releaseData = await gUtils.getReleaseData(addon);
         if (releaseData == null) {
             gSections.primary.main.innerText = "Release data missing.";
-            gSite.doneLoading();
             return;
         }
 
         // Show message thrown by API and return early
         if (releaseData.message) {
             gSections.primary.main.innerText = releaseData.message;
-            gSite.doneLoading();
             return;
         }
 
@@ -1218,7 +1215,6 @@ var gSite = {
         var addon = await gAPI.getAddon(aAddonSlug);
         if (!addon) {
             gSections.primary.main.innerText = "Invalid add-on.";
-            gSite.doneLoading();
             return;
         }
 
@@ -1249,7 +1245,6 @@ var gSite = {
         // Show message thrown by API and return early
         if (licenses.message) {
             gSections.primary.main.innerText = licenses.message;
-            gSite.doneLoading();
             return;
         }
 
@@ -1313,8 +1308,7 @@ var gSite = {
             case 1:
                 if (!addonSlug) {
                     gSections.primary.main.innerText = "Missing add-on parameter.";
-                    gSite.doneLoading();
-                    return;
+                    break;
                 }
                 await gSite.buildAddonPage(addonSlug, pageInfo.versionHistory);
                 break;
@@ -1322,8 +1316,7 @@ var gSite = {
             case 2:
                 if (!addonSlug) {
                     gSections.primary.main.innerText = "Missing add-on parameter.";
-                    gSite.doneLoading();
-                    return;
+                    break;
                 }
                 await gSite.buildLicensePage(addonSlug);
                 break;
