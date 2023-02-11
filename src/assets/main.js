@@ -232,7 +232,7 @@ var gAPI = {
         return metadata.owners;
     },
 
-    getOwnerId: async function (aUsername) {
+    getOwnerIndex: async function (aUsername) {
         let ownerData = await this.getOwners();
         var owner = ownerData.find(function (item) {
             return item.username == aUsername;
@@ -833,6 +833,21 @@ var gSite = {
 
     buildCategoryPage: async function (aTypeSlug, aOwner, aTerms, aPage) {
         let metadata = await gAPI.getMetadata();
+        var isSearchMode = (aOwner || aTerms);
+
+        var ownerIndex;
+        if (aOwner) {
+            ownerIndex = await gAPI.getOwnerIndex(aOwner);
+            if (ownerIndex != -1) {
+                let ownerHeader = document.createElement("h1");
+                let ownerDName = metadata.owners[ownerIndex].displayName;
+                ownerHeader.innerText = `Add-ons by ${ownerDName}`;
+                gSections.primary.main.appendChild(ownerHeader);
+            } else {
+                gSections.primary.main.innerText = "Invalid owner ID.";
+                return;
+            }
+        }
 
         var types = metadata.types;
         for (let i = 0; i < types.length; i++) {
@@ -851,17 +866,13 @@ var gSite = {
             }
             gSite.title = title;
 
-            let listTitle = document.createElement("h1");
+            let listTitle = document.createElement(
+                isSearchMode ? "h2" : "h1");
             listTitle.innerText = addonType.name;
             listTitle.id = addonType.slug;
 
             let listDescription = document.createElement("p");
             listDescription.innerText = addonType.description;
-
-            var ownerId;
-            if (aOwner) {
-                ownerId = await gAPI.getOwnerId(aOwner);
-            }
 
             if (aTerms) {
                 aTerms = aTerms.trim().toLowerCase();
@@ -871,7 +882,7 @@ var gSite = {
                 let matchType = item.type == addonType.type;
                 let matchOwner = true;
                 if (aOwner && item.owners) {
-                    matchOwner = item.owners.includes(ownerId);
+                    matchOwner = item.owners.includes(ownerIndex);
                 }
                 let matchTerms = true;
                 if (aTerms) {
@@ -890,7 +901,7 @@ var gSite = {
             let list = gUtils.createList(addons, addonType.defaultIcon, aPage);
 
             listBox.append(listTitle);
-            if (!aOwner && !aTerms) {
+            if (!isSearchMode) {
                 listBox.append(listDescription);
             }
             listBox.append(list);
@@ -902,10 +913,12 @@ var gSite = {
             gSections.primary.main.appendChild(listBox);
         }
 
-        if (aTypeSlug) {
-            gSections.setActiveNav(aTypeSlug);
-        } else {
-            gSections.setActiveNav("all");
+        if (!isSearchMode) {
+            if (aTypeSlug) {
+                gSections.setActiveNav(aTypeSlug);
+            } else {
+                gSections.setActiveNav("all");
+            }
         }
     },
 
@@ -1262,7 +1275,7 @@ var gSite = {
                 }
                 await gSite.buildCategoryPage(category, user, searchTerms, page);
                 break;
-            // Add-on
+            // Add-on: Main
             case 1:
                 if (!addonSlug) {
                     gSections.primary.main.innerText = "Missing add-on parameter.";
@@ -1271,6 +1284,7 @@ var gSite = {
                 }
                 await gSite.buildAddonPage(addonSlug, pageInfo.versionHistory);
                 break;
+            // Add-on: License
             case 2:
                 if (!addonSlug) {
                     gSections.primary.main.innerText = "Missing add-on parameter.";
