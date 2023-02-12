@@ -75,10 +75,6 @@ section.fixed {
 
 /* ::::: Content: Page ::::: */
 
-#section-loader, #section-primary {
-  transition: opacity 300ms ease-in;
-}
-
 #section-loader {
   opacity: 1;
 }
