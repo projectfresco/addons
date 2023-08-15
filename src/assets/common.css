@@ -75,26 +75,6 @@ section.fixed {
 
 /* ::::: Content: Page ::::: */
 
-#section-loader {
-  opacity: 1;
-}
-
-#section-primary {
-  opacity: 0;
-}
-
-body[data-loaded="true"] #section-loader {
-  opacity: 0;
-}
-
-body[data-loaded="true"] #section-primary {
-  opacity: 1;
-}
-
-#section-loader .throbber {
-  margin: 5px;
-}
-
 /* ::::: Header ::::: */
 
 #page-header-inner {

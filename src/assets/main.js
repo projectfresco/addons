@@ -638,7 +638,7 @@ var gUtils = {
         gUtils.clearStorage();
     },
     
-    getReleaseData: async function (aAddon) {
+    getReleaseData: async function (aAddon, aFatal = false) {
         var releaseData = null;
 
         if (aAddon.ghInfo) {
@@ -658,6 +658,19 @@ var gUtils = {
                 releaseData.compatibility = responseData.data;
             } else {
                 releaseData = responseData;
+            }
+        }
+
+        if (aFatal) {
+            if (releaseData == null) {
+                gSections.primary.main.innerText = "Release data missing.";
+                return;
+            }
+
+            // Show message thrown by API and return early
+            if (releaseData.message) {
+                gSections.primary.main.innerText = releaseData.message;
+                return;
             }
         }
 
@@ -770,15 +783,6 @@ var gSections = {
     },
 
     init: function () {
-        /* ::: Loader :::*/
-        var section = gSections.add("loader", true);
-        gSections.loader = section;
-
-        // Throbber
-        let throbber = document.createElement("div");
-        throbber.className = "throbber";
-        section.content.appendChild(throbber);
-
         /* ::: Primary :::*/
         var section = gSections.add("primary");
         gSections.primary = section;
@@ -1020,25 +1024,14 @@ var gSite = {
         }
         gUtils.appendLink(ilLicense, licenseText, licenseUrl, true);
 
-        // Add-on releases data
-        var releaseData = await gUtils.getReleaseData(addon);
-        if (releaseData == null) {
-            gSections.primary.main.innerText = "Release data missing.";
-            return;
-        }
-
-        // Show message thrown by API and return early
-        if (releaseData.message) {
-            gSections.primary.main.innerText = releaseData.message;
-            return;
-        }
-
         if (aVersionHistory) {
-            let releaseDataEntries = Object.entries(releaseData.data);
             gSite.title = `${addon.name} - Versions`;
             gUtils.appendLink(ilResources, "Add-on Details", `${URL_APP_BASE}get?addon=${addon.slug}`, false);
 
             gUtils.appendHtml(colPrimary.addonSummary, `${addon.name} Versions`, "h1");
+
+            let releaseData = await gUtils.getReleaseData(addon, true);
+            let releaseDataEntries = Object.entries(releaseData.data);
             gUtils.appendHtml(colPrimary.addonSummary, `${releaseDataEntries.length} releases`);
 
             let releaseList = document.createElement("div");
@@ -1112,15 +1105,16 @@ var gSite = {
             gSite.title = addon.name;
             gUtils.appendLink(ilResources, "Version History", `${URL_APP_BASE}versions?addon=${addon.slug}`, false);
 
-            let version = releaseData.stable || releaseData.prerelease;
-            let release = releaseData.data[version];
-
             let ownersList = await gUtils.createOwners(addon.owners, true);
             gUtils.appendHtml(colPrimary.addonSummary, addon.name, "h1");
             gUtils.appendHtml(colPrimary.addonSummary, `By ${ownersList}`);
             if (addon.description) {
                 gUtils.appendHtml(colPrimary.addonSummary, addon.description);
             }
+
+            let releaseData = await gUtils.getReleaseData(addon, true);
+            let version = releaseData.stable || releaseData.prerelease;
+            let release = releaseData.data[version];
 
             if (release) {
                 if (release.name) {
