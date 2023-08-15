@@ -15,8 +15,8 @@ const APP_NAME = "Fresco";
 const APP_VERSION = "0.0.2";
 const APP_NAV = [
     {
-        id: "all",
-        label: "All",
+        id: "home",
+        label: "Home",
         url: URL_APP_BASE
     },
     {
@@ -33,12 +33,18 @@ const APP_NAV = [
         id: "dictionaries",
         label: "Dictionaries",
         url: URL_APP_BASE + "?category=dictionaries&page=1"
-    }/*,
+    },
+    /*,
     {
         id: "language-packs",
         label: "Language Packs",
         url: URL_APP_BASE + "?category=language-packs&page=1"
     }*/
+    {
+        id: "all",
+        label: "All",
+        url: URL_APP_BASE + "?all=1"
+    },
 ];
 
 const APP_ADMIN_MODE = false;
@@ -424,6 +430,11 @@ var gUtils = {
                 listItem.parentElement.href = addon.externalUrl;
                 listItem.parentElement.target = "_blank";
                 gUtils.appendBadge(listItem.title, "External");
+            }
+
+            if (addon.appUrl) {
+                listItem.parentElement.href = addon.appUrl;
+                listItem.parentElement.target = "_blank";
             }
 
             if (addon.ghInfo || addon.releasesUrl) {
@@ -850,7 +861,22 @@ var gSite = {
         document.title = `${aTitle} - Add-ons - ${APP_NAME}`;
     },
 
-    buildCategoryPage: async function (aTypeSlug, aOwner, aTerms, aPage) {
+    buildHomePage: async function () {
+        gSections.setActiveNav("home");
+        gSections.primary.main.classList.add("two-col");
+
+        await gSite.buildCategoryPage("applications", null, null, null, true, "Featured Projects");
+
+        var colSecondary = gUtils.createAddonColumn(true);
+        gSections.primary.main.appendChild(colSecondary.container);
+        var ilSidebar = gUtils.createIsland("Built with Goanna");
+        colSecondary.content.appendChild(ilSidebar);
+        gUtils.appendHtml(ilSidebar, "All projects listed in this page are built on top of the Unified XUL Platform.<br/><br/>UXP/Goanna is a rapidly evolving project, and it is constantly being improved. It is a viable alternative to Gecko for developers who want a more efficient, secure, and customizable browser engine.");
+        
+        gSite.title = "Home";
+    },
+
+    buildCategoryPage: async function (aTypeSlug, aOwner, aTerms, aPage, aUnsorted, aCustomTitle) {
         let metadata = await gAPI.getMetadata();
         var isSearchMode = (aOwner || aTerms);
         var searchHeader = document.createElement("h1");
@@ -873,9 +899,6 @@ var gSite = {
 
         var types = metadata.types;
         for (let i = 0; i < types.length; i++) {
-            var listBox = document.createElement("div");
-            listBox.className = "list-wrapper";
-
             let addonType = types[i];
             let title = "";
             if (aTypeSlug) {
@@ -892,7 +915,7 @@ var gSite = {
 
             let listTitle = document.createElement(
                 isSearchMode ? "h2" : "h1");
-            listTitle.innerText = addonType.name;
+            listTitle.innerText = aCustomTitle ? aCustomTitle : addonType.name;
             listTitle.id = addonType.slug;
 
             let listDescription = document.createElement("p");
@@ -912,15 +935,22 @@ var gSite = {
                 }
 
                 return matchType && matchOwner && matchTerms;
-            }).sort(function (a, b) {
-                return a.name.toLowerCase().localeCompare(b.name.toLowerCase())
             });
+            
+            if (!aUnsorted) {
+                addons = addons.sort(function (a, b) {
+                    return a.name.toLowerCase().localeCompare(b.name.toLowerCase())
+                });
+            }
+            
             if (addons.length == 0) {
                 continue;
             }
 
             let list = gUtils.createList(addons, addonType.defaultIcon, aPage);
 
+            var listBox = document.createElement("div");
+            listBox.className = "list-wrapper";
             listBox.append(listTitle);
             if (!isSearchMode) {
                 listBox.append(listDescription);
@@ -930,7 +960,6 @@ var gSite = {
                 let pageCount = Math.ceil(addons.length / LIST_MAX_ITEMS);
                 listBox.append(gUtils.createPagination(pageCount, aPage));
             }
-
             gSections.primary.main.appendChild(listBox);
         }
 
@@ -1293,6 +1322,7 @@ var gSite = {
                 var category = urlParameters.get("category");
                 var user = urlParameters.get("user");
                 var searchTerms = urlParameters.get("q");
+                var listAll = urlParameters.get("all");
                 var page = parseInt(urlParameters.get("page"));
                 // Populate search box if we've terms.
                 if (searchTerms) {
@@ -1302,11 +1332,15 @@ var gSite = {
                     gSections.primary.main.innerText = "Please enter some search terms.";
                     break;
                 }
-                // Ignore page parameter if showing all add-ons
-                if (!category && page) {
-                    page = null;
+                if (category || user || searchTerms || listAll) {
+                    // Ignore page parameter if showing all add-ons
+                    if (listAll && page) {
+                        page = null;
+                    }
+                    await gSite.buildCategoryPage(category, user, searchTerms, page, null);
+                } else {
+                    await gSite.buildHomePage();
                 }
-                await gSite.buildCategoryPage(category, user, searchTerms, page);
                 break;
             // Add-on: Main
             case 1:
