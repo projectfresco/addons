@@ -125,12 +125,11 @@ footer {
 }
 
 .list-item > .button {
-  opacity: 0.25;
-  transition: opacity 100ms;
+  visibility: collapse;
 }
 
 .list-item:hover > .button {
-  opacity: 1;
+  visibility: visible;
 }
 
 /* ::::: Web Fonts ::::: */
