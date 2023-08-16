@@ -797,8 +797,9 @@ var gSections = {
         section.headerInner = headerInner;
         header.appendChild(headerInner);
 
-        let headerLogo = document.createElement("div");
+        let headerLogo = document.createElement("a");
         headerLogo.id = "page-header-logo";
+        headerLogo.href = URL_APP_BASE;
         headerInner.appendChild(headerLogo);
 
         // Header: search

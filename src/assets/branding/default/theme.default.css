@@ -155,6 +155,13 @@ footer {
   color: var(--link-hover-color);
 }
 
+/* Special case: hide the home link since the logo already refers to it.
+ * This mimics how the original Cavendish theme works.
+ */
+#page-nav ul > li a#menu-home {
+  display: none;
+}
+
 /* ::::: Buttons ::::: */
 
 .button {
