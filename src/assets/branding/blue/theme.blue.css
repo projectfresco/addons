@@ -6,6 +6,7 @@
   --link-color: #163665;
   --link-hover-color: #C01314;
   --radius: 9px;
+  --list-button-size: 130px;
 }
 
 html {
@@ -124,7 +125,6 @@ footer {
 }
 
 .list-item > .button {
-  flex: 130px 0 0;
   opacity: 0.25;
   transition: opacity 100ms;
 }

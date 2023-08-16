@@ -177,7 +177,7 @@ th {
 }
 
 .list-item > .button {
-  flex: 120px 0 0;
+  flex: var(--list-button-size) 0 0;
   width: auto;
 }
 
