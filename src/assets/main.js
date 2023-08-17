@@ -870,18 +870,24 @@ var gSite = {
         gSections.setActiveNav("home");
         gSections.primary.main.classList.add("two-col");
 
-        await gSite.buildCategoryPage("applications", null, null, null, true, "Featured Projects");
-
+        var colPrimary = document.createElement("div");
+        colPrimary.className = "col-primary";
         var colSecondary = gUtils.createAddonColumn(true);
+
+        gSections.primary.main.appendChild(colPrimary);
         gSections.primary.main.appendChild(colSecondary.container);
+
         var ilSidebar = gUtils.createIsland("Built with Goanna");
         colSecondary.content.appendChild(ilSidebar);
         gUtils.appendHtml(ilSidebar, "All projects listed in this page are built on top of the Unified XUL Platform.<br/><br/>UXP/Goanna is a rapidly evolving project, and it is constantly being improved. It is a viable alternative to Gecko for developers who want a more efficient, secure, and customizable browser engine.");
+
+        await gSite.buildCategoryPage(colPrimary, "applications", null, null, null, null, "Featured Projects");
+        await gSite.buildCategoryPage(colPrimary, "random");
         
         gSite.title = "Home";
     },
 
-    buildCategoryPage: async function (aTypeSlug, aOwner, aTerms, aPage, aUnsorted, aCustomTitle) {
+    buildCategoryPage: async function (aContainer, aTypeSlug, aOwner, aTerms, aPage, aUnsorted, aCustomTitle) {
         let metadata = await gAPI.getMetadata();
         var isSearchMode = (aOwner || aTerms);
         var searchHeader = document.createElement("div");
@@ -895,7 +901,7 @@ var gSite = {
                 let ownerDName = metadata.owners[ownerIndex].displayName;
                 searchTitle.innerText = `Add-ons by ${ownerDName}`;
             } else {
-                gSections.primary.main.innerText = "Invalid owner ID.";
+                aContainer.innerText = "Invalid owner ID.";
                 return;
             }
         }
@@ -905,11 +911,16 @@ var gSite = {
         }
         searchHeader.appendChild(searchTitle);
 
+        var isRandom = (aTypeSlug == "random");
         var types = metadata.types;
         for (let i = 0; i < types.length; i++) {
             let addonType = types[i];
             let title = "";
-            if (aTypeSlug) {
+            if (isRandom) {
+                if (addonType.slug == "applications") {
+                    continue;
+                }
+            } else if (aTypeSlug) {
                 if (addonType.slug != aTypeSlug) {
                     continue;
                 }
@@ -947,6 +958,13 @@ var gSite = {
                 return matchType && matchOwner && matchTerms;
             });
             
+            if (isRandom) {
+                addons = addons.slice(0, 5).map(function () { 
+                    return this.splice(Math.floor(Math.random() * this.length), 1)[0];
+                }, addons.slice());
+                listTitle.innerText = "Random " + listTitle.innerText;
+            }
+            
             if (!aUnsorted) {
                 addons = addons.sort(function (a, b) {
                     return a.name.toLowerCase().localeCompare(b.name.toLowerCase())
@@ -962,7 +980,7 @@ var gSite = {
             var listBox = document.createElement("div");
             listBox.className = "list-wrapper";
             listBox.append(listTitle);
-            if (!isSearchMode) {
+            if (!isSearchMode && !isRandom) {
                 listBox.append(listDescription);
             }
             listBox.append(list);
@@ -970,15 +988,15 @@ var gSite = {
                 let pageCount = Math.ceil(addons.length / LIST_MAX_ITEMS);
                 listBox.append(gUtils.createPagination(pageCount, aPage));
             }
-            gSections.primary.main.appendChild(listBox);
+            aContainer.appendChild(listBox);
         }
 
-        if (gSections.primary.main.children.length == 0) {
-            gSections.primary.main.innerText = "No search results.";
+        if (aContainer.children.length == 0) {
+            aContainer.innerText = "No search results.";
         } else if (isSearchMode) {
-            gSections.primary.main.insertBefore(
+            aContainer.insertBefore(
                 searchHeader,
-                gSections.primary.main.firstChild);
+                aContainer.firstChild);
             document.title = `${searchHeader.innerText} - ${APP_NAME}`;
         }
 
@@ -1337,7 +1355,8 @@ var gSite = {
                     if (listAll && page) {
                         page = null;
                     }
-                    await gSite.buildCategoryPage(category, user, searchTerms, page, null);
+                    await gSite.buildCategoryPage(
+                        gSections.primary.main, category, user, searchTerms, page, null);
                 } else {
                     await gSite.buildHomePage();
                 }
