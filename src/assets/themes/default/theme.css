@@ -190,6 +190,10 @@ footer :is(a, a:hover) {
   margin-bottom: 24px;
 }
 
+.list-wrapper:not([has-pagination]) {
+  padding-bottom: 0;
+}
+
 .list > .list-item {
   margin: 0 -24px;
   padding: 1em 24px;
@@ -197,7 +201,6 @@ footer :is(a, a:hover) {
 }
 
 .list > .list-item:last-child {
-  padding-bottom: 0;
   border-bottom: none;
 }
 

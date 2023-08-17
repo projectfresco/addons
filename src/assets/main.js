@@ -987,6 +987,7 @@ var gSite = {
             if (aPage) {
                 let pageCount = Math.ceil(addons.length / LIST_MAX_ITEMS);
                 listBox.append(gUtils.createPagination(pageCount, aPage));
+                listBox.setAttribute("has-pagination", "true");
             }
             aContainer.appendChild(listBox);
         }
