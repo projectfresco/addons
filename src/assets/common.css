@@ -290,6 +290,7 @@ th {
     margin-right: 0;
   }
   .two-col > .col-secondary {
+    margin-top: 1em;
     flex-basis: auto;
   }
 }
