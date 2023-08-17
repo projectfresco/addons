@@ -242,6 +242,11 @@ footer :is(a, a:hover) {
     margin: 8px;
   }
   
+  .search-header,
+  .list-wrapper:not(:last-child) {
+    margin-bottom: 8px;
+  }
+
   #page-header {
     padding-top: 0;
   }
