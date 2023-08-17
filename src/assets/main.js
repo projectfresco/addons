@@ -950,9 +950,19 @@ var gSite = {
                 }
                 let matchTerms = true;
                 if (aTerms) {
+                    let ownerDNames = "";
+                    for (let itemOwnerIndex of item.owners) {
+                        let itemOwner = metadata.owners[itemOwnerIndex];
+                        if (!itemOwner) {
+                            continue;
+                        }
+                        ownerDNames += ` ${itemOwner.displayName.toLowerCase()}`;
+                    }
+
                     matchTerms = item.name.toLowerCase().includes(aTerms) ||
                                  (item.description && item.description.toLowerCase().includes(aTerms)) ||
-                                 (item.keywords && item.keywords.toLowerCase().includes(aTerms));
+                                 (item.keywords && item.keywords.toLowerCase().includes(aTerms)) ||
+                                 ownerDNames.includes(aTerms);
                 }
 
                 return matchType && matchOwner && matchTerms;
