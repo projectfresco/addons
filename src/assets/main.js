@@ -884,23 +884,26 @@ var gSite = {
     buildCategoryPage: async function (aTypeSlug, aOwner, aTerms, aPage, aUnsorted, aCustomTitle) {
         let metadata = await gAPI.getMetadata();
         var isSearchMode = (aOwner || aTerms);
-        var searchHeader = document.createElement("h1");
+        var searchHeader = document.createElement("div");
+        searchHeader.className = "search-header";
 
         var ownerIndex;
+        var searchTitle = document.createElement("h1");
         if (aOwner) {
             ownerIndex = await gAPI.getOwnerIndex(aOwner);
             if (ownerIndex != -1) {
                 let ownerDName = metadata.owners[ownerIndex].displayName;
-                searchHeader.innerText = `Add-ons by ${ownerDName}`;
+                searchTitle.innerText = `Add-ons by ${ownerDName}`;
             } else {
                 gSections.primary.main.innerText = "Invalid owner ID.";
                 return;
             }
         }
         if (aTerms) {
-            searchHeader.innerText = `Search results for "${aTerms}"`;
+            searchTitle.innerText = `Search results for "${aTerms}"`;
             aTerms = aTerms.trim().toLowerCase();
         }
+        searchHeader.appendChild(searchTitle);
 
         var types = metadata.types;
         for (let i = 0; i < types.length; i++) {
@@ -922,9 +925,11 @@ var gSite = {
                 isSearchMode ? "h2" : "h1");
             listTitle.innerText = aCustomTitle ? aCustomTitle : addonType.name;
             listTitle.id = addonType.slug;
+            listTitle.className = "list-title";
 
             let listDescription = document.createElement("p");
             listDescription.innerText = addonType.description;
+            listDescription.className = "list-description";
 
             let addons = metadata.addons.filter(function (item) {
                 let matchType = item.type == addonType.type;
@@ -1035,7 +1040,7 @@ var gSite = {
             let releaseDataEntries = Object.entries(releaseData.data);
             gUtils.appendHtml(colPrimary.addonSummary, `${releaseDataEntries.length} releases`);
 
-            let releaseList = document.createElement("div");
+            let releaseList = gUtils.createIsland("");
             colPrimary.content.appendChild(releaseList);
 
             for (let [version, release] of releaseDataEntries) {
@@ -1107,10 +1112,10 @@ var gSite = {
             gUtils.appendLink(ilResources, "Version History", `${URL_APP_BASE}versions?addon=${addon.slug}`, false);
 
             let ownersList = await gUtils.createOwners(addon.owners, true);
-            gUtils.appendHtml(colPrimary.addonSummary, addon.name, "h1");
-            gUtils.appendHtml(colPrimary.addonSummary, `By ${ownersList}`);
+            gUtils.appendHtml(colPrimary.addonSummary, addon.name, "addon-name h1");
+            gUtils.appendHtml(colPrimary.addonSummary, `By ${ownersList}`, "addon-author");
             if (addon.description) {
-                gUtils.appendHtml(colPrimary.addonSummary, addon.description);
+                gUtils.appendHtml(colPrimary.addonSummary, addon.description, "addon-description");
             }
 
             let releaseData = await gUtils.getReleaseData(addon, true);
