@@ -12,7 +12,7 @@ const URL_GITHUB = "https://github.com/";
 const URL_LICENSE = "https://opensource.org/licenses/";
 
 const APP_NAME = "Fresco";
-const APP_VERSION = "0.0.3";
+const APP_VERSION = "0.1.0";
 const APP_NAV = [
     {
         id: "home",
