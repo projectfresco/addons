@@ -200,6 +200,10 @@ footer :is(a, a:hover) {
   border-bottom: 1px solid var(--color-page);
 }
 
+.list > .list-item:first-child {
+  border-top: 1px solid var(--color-page);  
+}
+
 .list > .list-item:last-child {
   border-bottom: none;
 }
