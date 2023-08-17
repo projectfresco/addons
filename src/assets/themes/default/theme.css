@@ -1,34 +1,22 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700&display=swap');
+
 /* ::::: Primary ::::: */
 
 :root {
+  --color-page: #e9ecef;
   --color-primary: #000000;
   --color-accent: #000000;
-  --link-color: #003399;
-  --link-hover-color: #333333;
-  --radius: 9px;
-  --max-distance: 910px;
+  --link-color: #0060df;
+  --link-hover-color: #0060df;
+  --radius: 4px;
+  --max-distance: 1366px;
   --list-button-size: 120px;
 }
 
 html {
-  font-family: verdana, sans-serif;
-  font-size: small;
-  background-color: #FFFFFF;
-  background-image: linear-gradient(to bottom, #E5E5E5, #FFFFFF 65px);
+  font-family: 'Inter', sans-serif;
+  background-color: var(--color-page);
   background-repeat: no-repeat;
-}
-
-h1, h2, h3, h4, h5, h6 {
-  border-bottom: 1px solid #CCCCCC;
-  font-family: arial, verdana, sans-serif;
-}
-
-footer {
-  border-top: 1px solid #999999;
-  color: #666666;
-  text-align: center;
-  margin: 2em 0;
-  padding: 1em 0;
 }
 
 .throbber {
@@ -42,13 +30,18 @@ footer {
 
 /* ::::: Content: Box Layout ::::: */
 
-.box {
-  padding: 3px;
-  color: black;
+body,
+section {
+  margin: 0;
+  padding: 0;
+}
+
+.content-layout {
+  padding: 0;
 }
 
 .box-inner {
-  padding: 17px 9px 9px 9px;
+  margin: 18px 24px;
 }
 
 /* ::::: Header ::::: */
@@ -56,15 +49,13 @@ footer {
 #page-header {
   font-size: 1.5em;
   color: var(--color-primary);
-  background-color: #2A3753;
-  background-image: linear-gradient(to bottom, #455372 0%, #2A3753 80%, #2A3753 100%);
-  border-radius: var(--radius);
+  background-color: #20123a;
   padding: 1em 1em 0 1em;
 }
 
 #page-header-inner {
   transition: margin-bottom 250ms;
-  margin-bottom: -18px;
+  margin-bottom: -30px;
 }
 
 #page-header-logo {
@@ -75,27 +66,14 @@ footer {
   height: 45px;
 }
 
-@media screen and (max-width: 768px) {
-  #page-header-inner {
-    margin-bottom: 0;
-  }
-  
-  #page-header-search {
-    margin-top: 0;
-    margin-bottom: 10px;
-  }
-}
-
-#page-header-search {
-  margin-top: -10px;
-}
 
 #page-header-search > #q {
-  font-size: 12px;
   width: 170px;
-  border:	1px solid #9097A2;
-  background: #D9DBE1;
-  padding: 2px;
+  border:	1px solid transparent;
+  border-radius: var(--radius);
+  background: #ffffff;
+  font-size: 14px;
+  padding: 4px 12px;
 }
 
 #page-header-search > #q:hover,
@@ -103,104 +81,188 @@ footer {
   background: #fff;
 }
 
+#page-header-search > #q:focus {
+  border-color: #00feff;
+  box-shadow: inset
+              0 0 0 1px #0a84ff,
+              0 0 0 1px #0a84ff,
+              0 0 0 4px rgba(10, 132, 255, .3);
+}
+
 #page-header-search > #submit {
-  font-size: 12px;
-  font-weight: bold;
-  background: #6A7389;
-  color: #fff;
-  margin-left: 4px;
-  padding: 1px 4px;
-  border-right: 1px solid #283043;
-  border-bottom: 1px solid #283043;
-  border-top: 1px solid #9097A2;
-  border-left: 1px solid #9097A2;  
+  display: none;
 }
 
 /* ::::: Navigation ::::: */
 
 #page-nav ul {
-  justify-content: flex-end;
+  justify-content: center;
 }
 
 #page-nav ul > li a {
   display: block;
   padding: 4px 10px;
-  color: #FFFFFF;
-  background-color: #5F697E;
-  background-image: linear-gradient(to bottom, #6A758A 0%, #5F697E 95%, #5F697E 100%);
-  font-size: 13px;
-  font-weight: bold;
+  color: #b1b1b3;
+  font-size: 0.65em;
   text-decoration: none;
-  border-radius: 8px 8px 0 0;
-  border-top: 1px solid #6A758A;
-  border-bottom: 1px solid #515358;
-  margin-left: 1px;
+  border-bottom: 3px solid transparent;
+  margin: 6px 4px;
 }
 
 #page-nav ul > li a:focus,
 #page-nav ul > li a:hover {
-  background: #747F96;
+  border-color: #b1b1b3;
 }
 
 #page-nav ul > li a.active {
-  border-top-color: #FFFFFF;
-  border-bottom-color: #FFFFFF;
-  background: #fff;
-  color: var(--link-color);
+  color: #ffffff;
+  border-color: #ffffff;
 }
 
-#page-nav ul > li a.active:focus,
-#page-nav ul > li a.active:hover {
-  border-top-color: #FFC600;
-  color: var(--link-hover-color);
-}
-
-/* Special case: hide the home link since the logo already refers to it.
- * This mimics how the original Cavendish theme works.
- */
 #page-nav ul > li a#menu-home {
   display: none;
+}
+
+/* ::::: Footer ::::: */
+
+footer {
+  background: #051818;
+  color: #ffffff;
+  text-align: center;
+  padding: 1em 0;
+}
+
+footer a {
+  text-decoration: none;
+}
+
+footer a:hover {
+  text-decoration: underline;
+}
+
+footer :is(a, a:hover) {
+  color: #ffffff;
 }
 
 /* ::::: Buttons ::::: */
 
 .button {
-  border: 1px groove #A1AD78;
-  border-top-style: none;
-  border-left-style: none;
-  border-radius: 9px;
-  background-color: #BEE6A1;
+  border-radius: var(--radius);
+  background: #0060df;
   width: 120px;
   height: 21px;
   padding: 10px;
 }
 
-.button > .button-icon {
-  background-image: url("download.png");
+.button:hover {
+  background: #003eaa;
 }
 
-.button.loading > .button-icon {
-  background-image: url("throbber.gif");
+.button:hover:active {
+  background: #002275;
+}
+
+.button,
+.button:is(:hover, :active, :hover:active, :visited) {
+  color: #ffffff;
+}
+
+.button > .button-icon {
+  display: none;
 }
 
 .button.disabled {
   background-color: #D8D8D8;
 }
 
-.button.download {
-  background-color: #DFE5A0;
+/* ::::: Lists ::::: */
+
+.search-header,
+.island,
+.list-wrapper {
+  background: #ffffff;
+  border-radius: calc(var(--radius) * 3);
+  padding: 24px;
 }
 
-/* ::::: Lists ::::: */
+.search-header,
+.list-wrapper:not(:last-child) {
+  margin-bottom: 24px;
+}
+
+.list > .list-item {
+  margin: 0 -24px;
+  padding: 1em 24px;
+  border-bottom: 1px solid var(--color-page);
+}
+
+.list > .list-item:last-child {
+  padding-bottom: 0;
+  border-bottom: none;
+}
+
+.list-item > .list-item-body .list-item-title {
+  font-weight: 500;
+}
+
+.list-item[href] {
+  color: var(--color-primary);
+}
 
 .list-item[href]:hover .list-item-title {
   color: var(--link-hover-color);
 }
 
-.list-item[href] .list-item-title {
-  color: var(--link-color);
+/* ::::: Page: Individual Add-on ::::: */
+
+#addon {
+  flex-direction: column;
 }
 
-.list-item:nth-child(even) {
-  background: #F0F0F0;
+#addon-summary > .addon-name {
+  font-size: 3em;
+}
+
+#addon-summary > .addon-author {
+  font-size: 1.5em;
+}
+
+#addon-summary > .addon-author a {
+  text-decoration: none;
+}
+
+#addon-summary > .addon-description {
+  margin: 12px 0;
+}
+
+/* ::::: Mobile View ::::: */
+
+@media screen and (max-width: 768px) {
+  .box-inner {
+    margin: 8px;
+  }
+  
+  #page-header {
+    padding-top: 0;
+  }
+
+  #page-header-inner {
+    padding-top: 6px;
+    margin-bottom: 0;
+    flex-direction: column-reverse;
+    align-items: center;
+  }
+  
+  #page-header-search {
+    margin-top: 0;
+    margin-bottom: 10px;
+  }
+  
+  #page-header-search > #q {
+    width: 75vw;
+  }
+  
+  .list-item[href] .button {
+    display: none;
+  }
 }

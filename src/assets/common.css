@@ -238,7 +238,6 @@ th {
 
 #addon {
   display: flex;
-  margin-right: 1em;
 }
 
 #addon > #addon-icon {
@@ -264,7 +263,7 @@ th {
   justify-content: space-between;
 }
 
-.two-col > .col-primary {
+.two-col > :is(:first-child, .col-primary) {
   flex: 1;
   margin-right: 1em;
 }
@@ -287,7 +286,10 @@ th {
   .two-col {
     flex-direction: column;
   }
-  .two-col > .col-primary {
+  .two-col > :is(:first-child, .col-primary) {
     margin-right: 0;
+  }
+  .two-col > .col-secondary {
+    flex-basis: auto;
   }
 }
