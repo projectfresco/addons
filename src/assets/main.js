@@ -1196,6 +1196,11 @@ var gSite = {
                 gUtils.appendHtml(ilMessage, "This add-on has no releases.");
                 colPrimary.content.appendChild(ilMessage);
             }
+
+            var ilTalk = gUtils.createIsland("Discussions");
+            var target = document.getElementsByClassName("giscus")[0];
+            ilTalk.appendChild(target);
+            colPrimary.content.appendChild(ilTalk);
         }
 
         if (addon.supportEmail) {

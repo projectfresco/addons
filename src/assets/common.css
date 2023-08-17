@@ -258,6 +258,14 @@ th {
   margin-bottom: 1em;
 }
 
+.talk-box {
+  display: none;
+}
+
+.island > .talk-box {
+  display: block;
+}
+
 .two-col {
   display: flex;
   justify-content: space-between;
