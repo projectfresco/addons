@@ -257,7 +257,7 @@ var gUtils = {
 
     parseMarkdown: async function (aText) {
         let parsedValue = "";
-        await System.import("./assets/libs/marked/marked.min.js")
+        await System.import("https://cdnjs.cloudflare.com/ajax/libs/marked/5.1.1/marked.min.js")
             .then(function () {
                 parsedValue = marked.parse(aText);
             });
