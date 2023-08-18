@@ -242,6 +242,8 @@ footer :is(a, a:hover) {
 
 #addon-summary > .addon-name {
   font-size: 3em;
+  text-overflow: ellipsis;
+  overflow: auto;
 }
 
 #addon-summary > .addon-author {
