@@ -886,7 +886,7 @@ var gSite = {
         gSite.title = "Home";
     },
 
-    buildCategoryPage: async function (aContainer, aTypeSlug, aOwner, aTerms, aPage, aUnsorted, aCustomTitle) {
+    buildCategoryPage: async function (aContainer, aTypeSlug, aOwner, aTerms, aPage) {
         let metadata = await gAPI.getMetadata();
         var isSearchMode = (aOwner || aTerms);
         var searchHeader = document.createElement("div");
@@ -929,7 +929,7 @@ var gSite = {
 
             let listTitle = document.createElement(
                 isSearchMode ? "h2" : "h1");
-            listTitle.innerText = aCustomTitle ? aCustomTitle : addonType.name;
+            listTitle.innerText = addonType.name;
             listTitle.id = addonType.slug;
             listTitle.className = "list-title";
 
@@ -970,11 +970,9 @@ var gSite = {
                 listTitle.innerText = "Random " + listTitle.innerText;
             }
             
-            if (!aUnsorted) {
-                addons = addons.sort(function (a, b) {
-                    return a.name.toLowerCase().localeCompare(b.name.toLowerCase())
-                });
-            }
+            addons = addons.sort(function (a, b) {
+                return a.name.toLowerCase().localeCompare(b.name.toLowerCase())
+            });
             
             if (addons.length == 0) {
                 continue;
@@ -1367,7 +1365,7 @@ var gSite = {
                         page = null;
                     }
                     await gSite.buildCategoryPage(
-                        gSections.primary.main, category, user, searchTerms, page, null);
+                        gSections.primary.main, category, user, searchTerms, page);
                 } else {
                     await gSite.buildHomePage();
                 }
