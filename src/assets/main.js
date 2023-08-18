@@ -879,9 +879,8 @@ var gSite = {
 
         var ilSidebar = gUtils.createIsland("Built with Goanna");
         colSecondary.content.appendChild(ilSidebar);
-        gUtils.appendHtml(ilSidebar, "All projects listed in this page are built on top of the Unified XUL Platform.<br/><br/>UXP/Goanna is a rapidly evolving project, and it is constantly being improved. It is a viable alternative to Gecko for developers who want a more efficient, secure, and customizable browser engine.");
+        gUtils.appendHtml(ilSidebar, "All applications listed in this page are built on top of the Unified XUL Platform.<br/><br/>UXP/Goanna is a rapidly evolving project, and it is constantly being improved. It is a viable alternative to Gecko for developers who want a more efficient, secure, and customizable browser engine.");
 
-        await gSite.buildCategoryPage(colPrimary, "applications", null, null, null, null, "Featured Projects");
         await gSite.buildCategoryPage(colPrimary, "random");
         
         gSite.title = "Home";
@@ -916,11 +915,7 @@ var gSite = {
         for (let i = 0; i < types.length; i++) {
             let addonType = types[i];
             let title = "";
-            if (isRandom) {
-                if (addonType.slug == "applications") {
-                    continue;
-                }
-            } else if (aTypeSlug) {
+            if (aTypeSlug && !isRandom) {
                 if (addonType.slug != aTypeSlug) {
                     continue;
                 }
