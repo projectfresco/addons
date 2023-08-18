@@ -220,6 +220,20 @@ footer :is(a, a:hover) {
   color: var(--link-hover-color);
 }
 
+.list-item .badge {
+  background: none;
+  color: #630505;
+  border: 1px solid #ff9503;
+  border-radius: 9999em;
+  text-transform: none;
+}
+
+.list-item .badge.prerelease {
+  background: none;
+  border-color: #998b00;
+  color: #998b00;
+}
+
 /* ::::: Page: Individual Add-on ::::: */
 
 #addon {
